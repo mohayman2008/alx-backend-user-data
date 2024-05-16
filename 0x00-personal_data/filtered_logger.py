@@ -16,7 +16,7 @@ def filter_datum(fields: List[str], redaction: str, message: str,
                  separator: str) -> str:
     '''The function obfuscated the "fields" data in a log record "message"
     where all the fields are separated by "separator", and replace "fields"
-    data with "redaction" str, '''
+    data with "redaction" string'''
     for field in fields:
         pattern = r"({field}=)[^{separator}]+{separator}"
         pattern = pattern.format(field=field, separator=separator)
