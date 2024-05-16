@@ -67,9 +67,9 @@ def get_db() -> MySQLConnection:
         "passwd": os.getenv("PERSONAL_DATA_DB_PASSWORD", ""),
         "host": os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
         "database": os.getenv("PERSONAL_DATA_DB_NAME"),
-        # "pool_name": "mypool",
+        "pool_name": "mypool",
         "pool_size": 5,
-        # "pool_reset_session": False
+        "pool_reset_session": False
     }
 
     return mysql.connector.connect(**params)
