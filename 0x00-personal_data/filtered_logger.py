@@ -12,18 +12,15 @@ from mysql.connector.connection import MySQLConnection
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
+'''The function obfuscated the "fields" data in a log record "message"
+where all the fields are separated by "separator", and replace "fields"
+data with "redaction" string'''
 def filter_datum(fields: List[str], redaction: str, message: str,
                  separator: str) -> str:
-    '''The function obfuscated the "fields" data in a log record "message"
-    where all the fields are separated by "separator", and replace "fields"
-    data with "redaction" string'''
-    for field in fields:
-        pattern = r"({field}=)[^{separator}]+{separator}"
-        pattern = pattern.format(field=field, separator=separator)
-        replacement = r"\1{}{}".format(redaction, separator)
-
-        message = re.sub(pattern, replacement, message)
-    return message
+    '''Single line docstring'''
+    pattern = r"((?:{0})=)[^{1}]+{1}".format("|".join(fields), separator)
+    replacement = r"\1{}{}".format(redaction, separator)
+    return re.sub(pattern, replacement, message)
 
 
 class RedactingFormatter(logging.Formatter):
