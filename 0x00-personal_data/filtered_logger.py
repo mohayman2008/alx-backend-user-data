@@ -5,7 +5,7 @@ import re
 from typing import List, Union
 from os import getenv
 
-# from mysql.connector.connection import MySQLConnection
+from mysql.connector.connection import MySQLConnection
 import mysql.connector  # type: ignore
 from mysql.connector.pooling import PooledMySQLConnection
 from mysql.connector.abstracts import MySQLConnectionAbstract
@@ -59,7 +59,8 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db() -> Union[PooledMySQLConnection, MySQLConnectionAbstract]:
+# def get_db() -> Union[PooledMySQLConnection, MySQLConnectionAbstract]:
+def get_db() -> MySQLConnection:
     '''The function creates and returns a connector to the database,
     using values from enviroment variables'''
     params = {
@@ -79,6 +80,7 @@ def main():
     row under a filtered format'''
     logger = get_logger()
     db = get_db()
+    # print(isinstance(db, MySQLConnection))
     cursor = db.cursor()
 
     cursor.execute("SELECT * FROM users;")
