@@ -65,7 +65,7 @@ def get_db() -> MySQLConnection:
         "user": os.getenv("PERSONAL_DATA_DB_USERNAME", "root"),
         "password": os.getenv("PERSONAL_DATA_DB_PASSWORD", ""),
         "host": os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
-        "database": os.getenv("PERSONAL_DATA_DB_NAME", "my_db")
+        "database": os.getenv("PERSONAL_DATA_DB_NAME")
     }
 
     # return mysql.connector.connect(**params)
@@ -74,11 +74,12 @@ def get_db() -> MySQLConnection:
     #                        host=params["host"], database=params["database"])
 
 
-def main():
+def main() -> None:
     '''Entry point
     retrieve all rows in the "users" table in the database and display each
     row under a filtered format'''
     logger = get_logger()
+    logger.handlers[0].stream = __import__("sys").stdout
     db = get_db()
     cursor = db.cursor()
 
