@@ -7,8 +7,8 @@ from os import getenv
 
 from mysql.connector.connection import MySQLConnection
 import mysql.connector  # type: ignore
-from mysql.connector.pooling import PooledMySQLConnection
-from mysql.connector.abstracts import MySQLConnectionAbstract
+# from mysql.connector.pooling import PooledMySQLConnection
+# from mysql.connector.abstracts import MySQLConnectionAbstract
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
@@ -59,7 +59,6 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-# def get_db() -> Union[PooledMySQLConnection, MySQLConnectionAbstract]:
 def get_db() -> MySQLConnection:
     '''The function creates and returns a connector to the database,
     using values from enviroment variables'''
@@ -67,11 +66,11 @@ def get_db() -> MySQLConnection:
         "user": getenv("PERSONAL_DATA_DB_USERNAME", "root"),
         "password": getenv("PERSONAL_DATA_DB_PASSWORD", ""),
         "host": getenv("PERSONAL_DATA_DB_HOST", "localhost"),
-        "database": getenv("PERSONAL_DATA_DB_NAME", "holberton")
+        "database": getenv("PERSONAL_DATA_DB_NAME", "")
     }
 
-    return mysql.connector.connect(**params)
-    # return MySQLConnection(**params)
+    # return mysql.connector.connect(**params)
+    return MySQLConnection(**params)
 
 
 def main():
@@ -86,12 +85,6 @@ def main():
     cursor.execute("SELECT * FROM users;")
     cols = [column[0] for column in cursor.description]
 
-    # for row in cursor:
-    #     msg = ""
-    #     i = 0
-    #     for value in row:
-    #         msg += f"{fields[i]}={value}; "
-    #         i += 1
     for row in cursor:
         row = map(lambda i: str(i), row)
         msg = "; ".join(["=".join(field) for field in list(zip(cols, row))])
