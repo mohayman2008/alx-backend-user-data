@@ -6,6 +6,7 @@ from typing import List, Union
 from os import getenv
 
 # from mysql.connector.connection import MySQLConnection
+import mysql.connector  # type: ignore
 from mysql.connector.pooling import PooledMySQLConnection
 from mysql.connector.abstracts import MySQLConnectionAbstract
 
@@ -68,7 +69,6 @@ def get_db() -> Union[PooledMySQLConnection, MySQLConnectionAbstract]:
         "database": getenv("PERSONAL_DATA_DB_NAME", "holberton")
     }
 
-    import mysql.connector
     return mysql.connector.connect(**params)
     # return MySQLConnection(**params)
 
@@ -79,7 +79,6 @@ def main():
     row under a filtered format'''
     logger = get_logger()
     db = get_db()
-    print(type(db))
     cursor = db.cursor()
 
     cursor.execute("SELECT * FROM users;")
