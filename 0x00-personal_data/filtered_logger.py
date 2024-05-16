@@ -2,12 +2,12 @@
 '''The module implements logger that filters out PII data out'''
 import logging
 import re
-from typing import Sequence
+from typing import List
 
 PII_FIELDS = ("email", "phone", "ssn", "password", "ip")
 
 
-def filter_datum(fields: Sequence[str], redaction: str, message: str,
+def filter_datum(fields: List[str], redaction: str, message: str,
                  separator: str) -> str:
     '''The function obfuscated the "fields" data in a log record "message"
     where all the fields are separated by "separator", and replace "fields"
@@ -28,7 +28,7 @@ class RedactingFormatter(logging.Formatter):
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
     SEPARATOR = ";"
 
-    def __init__(self, fields: Sequence[str]):
+    def __init__(self, fields: List[str]):
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
 
@@ -47,7 +47,7 @@ def get_logger() -> logging.Logger:
     logger.propagate = False
 
     stream_handler = logging.StreamHandler()
-    stream_handler.setFormatter(RedactingFormatter(PII_FIELDS))
+    stream_handler.setFormatter(RedactingFormatter(list(PII_FIELDS)))
     logger.addHandler(stream_handler)
 
     return logger
