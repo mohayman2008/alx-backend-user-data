@@ -2,12 +2,12 @@
 '''The module implements logger that filters out PII data out'''
 import logging
 import re
-from typing import List, Union
-# from os import getenv
+from typing import List
 import os
 
 from mysql.connector.connection import MySQLConnection
-import mysql.connector  # type: ignore
+import mysql.connector.connection
+# import mysql.connector  # type: ignore
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
@@ -58,33 +58,20 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db() -> MySQLConnection:
+def get_db() -> mysql.connector.connection.MySQLConnection:
     '''The function creates and returns a connector to the database,
     using values from enviroment variables'''
-    # params = {
-    #     "user": os.getenv("PERSONAL_DATA_DB_USERNAME", "root"),
-    #     "password": os.getenv("PERSONAL_DATA_DB_PASSWORD", ""),
-    #     "host": os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
-    #     "database": os.getenv("PERSONAL_DATA_DB_NAME", "")
-    # }
+    params = {
+        "user": os.getenv("PERSONAL_DATA_DB_USERNAME", "root"),
+        "password": os.getenv("PERSONAL_DATA_DB_PASSWORD", ""),
+        "host": os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
+        "database": os.getenv("PERSONAL_DATA_DB_NAME", "")
+    }
 
-    # # return mysql.connector.connect(**params)
-    # # return MySQLConnection(**params)
+    # return mysql.connector.connect(**params)
+    return MySQLConnection(**params)
     # return MySQLConnection(user=params["user"], password=params["password"],
     #                        host=params["host"], database=params["database"])
-
-    db_host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
-    db_name = os.getenv("PERSONAL_DATA_DB_NAME", "")
-    db_user = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
-    db_pwd = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
-    connection = mysql.connector.connect(
-        host=db_host,
-        port=3306,
-        user=db_user,
-        password=db_pwd,
-        database=db_name,
-    )
-    return connection
 
 
 def main():
