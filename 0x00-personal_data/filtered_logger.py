@@ -3,6 +3,9 @@
 import logging
 import re
 from typing import List
+from os import getenv
+
+from mysql.connector.connection import MySQLConnection  # type: ignore
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
@@ -51,3 +54,16 @@ def get_logger() -> logging.Logger:
     logger.addHandler(stream_handler)
 
     return logger
+
+
+def get_db() -> MySQLConnection:
+    '''The function creates and returns a connector to the database,
+    using values from enviroment variables'''
+    params = {
+        "user": getenv("PERSONAL_DATA_DB_USERNAME", "root"),
+        "password": getenv("PERSONAL_DATA_DB_PASSWORD", ""),
+        "host": getenv("PERSONAL_DATA_DB_HOST", "localhost"),
+        "database": getenv("PERSONAL_DATA_DB_NAME", "holberton")
+    }
+
+    return MySQLConnection(**params)
