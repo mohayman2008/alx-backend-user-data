@@ -64,12 +64,16 @@ def get_db() -> MySQLConnection:
     params = {
         "user": os.getenv("PERSONAL_DATA_DB_USERNAME", "root"),
         "password": os.getenv("PERSONAL_DATA_DB_PASSWORD", ""),
+        "passwd": os.getenv("PERSONAL_DATA_DB_PASSWORD", ""),
         "host": os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
-        "database": os.getenv("PERSONAL_DATA_DB_NAME")
+        "database": os.getenv("PERSONAL_DATA_DB_NAME"),
+        # "pool_name": "mypool",
+        "pool_size": 5,
+        # "pool_reset_session": False
     }
 
-    # return mysql.connector.connect(**params)
-    return MySQLConnection(**params)
+    return mysql.connector.connect(**params)
+    # return MySQLConnection(**params)
     # return MySQLConnection(user=params["user"], password=params["password"],
     #                        host=params["host"], database=params["database"])
 
@@ -81,6 +85,7 @@ def main() -> None:
     logger = get_logger()
     logger.handlers[0].stream = __import__("sys").stdout
     db = get_db()
+    # print(type(db))
     cursor = db.cursor()
 
     cursor.execute("SELECT * FROM users;")
