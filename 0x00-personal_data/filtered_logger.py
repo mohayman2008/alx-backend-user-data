@@ -7,8 +7,6 @@ from os import getenv
 
 from mysql.connector.connection import MySQLConnection
 import mysql.connector  # type: ignore
-# from mysql.connector.pooling import PooledMySQLConnection
-# from mysql.connector.abstracts import MySQLConnectionAbstract
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
@@ -70,7 +68,9 @@ def get_db() -> MySQLConnection:
     }
 
     # return mysql.connector.connect(**params)
-    return MySQLConnection(**params)
+    # return MySQLConnection(**params)
+    return MySQLConnection(user=params["user"], password=params["password"],
+                           host=params["host"], database=params["database"])
 
 
 def main():
@@ -79,7 +79,6 @@ def main():
     row under a filtered format'''
     logger = get_logger()
     db = get_db()
-    # print(isinstance(db, MySQLConnection))
     cursor = db.cursor()
 
     cursor.execute("SELECT * FROM users;")
