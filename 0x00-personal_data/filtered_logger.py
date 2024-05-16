@@ -3,7 +3,8 @@
 import logging
 import re
 from typing import List, Union
-from os import getenv
+# from os import getenv
+import os
 
 from mysql.connector.connection import MySQLConnection
 import mysql.connector  # type: ignore
@@ -61,10 +62,10 @@ def get_db() -> MySQLConnection:
     '''The function creates and returns a connector to the database,
     using values from enviroment variables'''
     params = {
-        "user": getenv("PERSONAL_DATA_DB_USERNAME", "root"),
-        "password": getenv("PERSONAL_DATA_DB_PASSWORD", ""),
-        "host": getenv("PERSONAL_DATA_DB_HOST", "localhost"),
-        "database": getenv("PERSONAL_DATA_DB_NAME", "")
+        "user": os.getenv("PERSONAL_DATA_DB_USERNAME", "root"),
+        "password": os.getenv("PERSONAL_DATA_DB_PASSWORD", ""),
+        "host": os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
+        "database": os.getenv("PERSONAL_DATA_DB_NAME", "")
     }
 
     # return mysql.connector.connect(**params)
