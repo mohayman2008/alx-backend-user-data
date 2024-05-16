@@ -61,17 +61,30 @@ def get_logger() -> logging.Logger:
 def get_db() -> MySQLConnection:
     '''The function creates and returns a connector to the database,
     using values from enviroment variables'''
-    params = {
-        "user": os.getenv("PERSONAL_DATA_DB_USERNAME", "root"),
-        "password": os.getenv("PERSONAL_DATA_DB_PASSWORD", ""),
-        "host": os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
-        "database": os.getenv("PERSONAL_DATA_DB_NAME", "")
-    }
+    # params = {
+    #     "user": os.getenv("PERSONAL_DATA_DB_USERNAME", "root"),
+    #     "password": os.getenv("PERSONAL_DATA_DB_PASSWORD", ""),
+    #     "host": os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
+    #     "database": os.getenv("PERSONAL_DATA_DB_NAME", "")
+    # }
 
-    # return mysql.connector.connect(**params)
-    # return MySQLConnection(**params)
-    return MySQLConnection(user=params["user"], password=params["password"],
-                           host=params["host"], database=params["database"])
+    # # return mysql.connector.connect(**params)
+    # # return MySQLConnection(**params)
+    # return MySQLConnection(user=params["user"], password=params["password"],
+    #                        host=params["host"], database=params["database"])
+
+    db_host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
+    db_name = os.getenv("PERSONAL_DATA_DB_NAME", "")
+    db_user = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
+    db_pwd = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
+    connection = mysql.connector.connect(
+        host=db_host,
+        port=3306,
+        user=db_user,
+        password=db_pwd,
+        database=db_name,
+    )
+    return connection
 
 
 def main():
