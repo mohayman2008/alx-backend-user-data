@@ -6,7 +6,6 @@ from typing import List
 import os
 
 from mysql.connector.connection import MySQLConnection
-import mysql.connector.connection
 # import mysql.connector  # type: ignore
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
@@ -58,18 +57,18 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db() -> mysql.connector.connection.MySQLConnection:
+def get_db() -> MySQLConnection:
     '''The function creates and returns a connector to the database,
     using values from enviroment variables'''
     params = {
         "user": os.getenv("PERSONAL_DATA_DB_USERNAME", "root"),
         "password": os.getenv("PERSONAL_DATA_DB_PASSWORD", ""),
         "host": os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
-        "database": os.getenv("PERSONAL_DATA_DB_NAME", "")
+        "database": os.getenv("PERSONAL_DATA_DB_NAME", "my_db")
     }
 
-    return mysql.connector.connect(**params)
-    # return MySQLConnection(**params)
+    # return mysql.connector.connect(**params)
+    return MySQLConnection(**params)
     # return MySQLConnection(user=params["user"], password=params["password"],
     #                        host=params["host"], database=params["database"])
 
