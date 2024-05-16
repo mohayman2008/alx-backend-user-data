@@ -67,3 +67,35 @@ def get_db() -> MySQLConnection:
     }
 
     return MySQLConnection(**params)
+
+
+def main():
+    '''Entry point
+    retrieve all rows in the "users" table in the database and display each
+    row under a filtered format'''
+    logger = get_logger()
+    db = get_db()
+    cursor = db.cursor()
+
+    cursor.execute("SELECT * FROM users;")
+    cols = [column[0] for column in cursor.description]
+
+    # for row in cursor:
+    #     msg = ""
+    #     i = 0
+    #     for value in row:
+    #         msg += f"{fields[i]}={value}; "
+    #         i += 1
+    for row in cursor:
+        row = map(lambda i: str(i), row)
+        msg = "; ".join(["=".join(field) for field in list(zip(cols, row))])
+        if len(msg):
+            msg += ";"
+        logger.info(msg)
+
+    cursor.close()
+    db.close()
+
+
+if __name__ == "__main__":
+    main()
