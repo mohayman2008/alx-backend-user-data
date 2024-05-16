@@ -2,10 +2,12 @@
 '''The module implements logger that filters out PII data out'''
 import logging
 import re
-from typing import List
+from typing import List, Union
 from os import getenv
 
-from mysql.connector.connection import MySQLConnection  # type: ignore
+# from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
+from mysql.connector.abstracts import MySQLConnectionAbstract
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
@@ -56,7 +58,7 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db() -> MySQLConnection:
+def get_db() -> Union[PooledMySQLConnection, MySQLConnectionAbstract]:
     '''The function creates and returns a connector to the database,
     using values from enviroment variables'''
     params = {
@@ -66,7 +68,9 @@ def get_db() -> MySQLConnection:
         "database": getenv("PERSONAL_DATA_DB_NAME", "holberton")
     }
 
-    return MySQLConnection(**params)
+    import mysql.connector
+    return mysql.connector.connect(**params)
+    # return MySQLConnection(**params)
 
 
 def main():
@@ -75,6 +79,7 @@ def main():
     row under a filtered format'''
     logger = get_logger()
     db = get_db()
+    print(type(db))
     cursor = db.cursor()
 
     cursor.execute("SELECT * FROM users;")
