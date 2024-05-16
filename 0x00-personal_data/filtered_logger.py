@@ -72,7 +72,17 @@ def get_db() -> MySQLConnection:
         "pool_reset_session": False
     }
 
-    return mysql.connector.connect(**params)
+    # return mysql.connector.connect(**params)
+    return mysql.connector.connect(
+        user=params["user"],
+        password=params["password"],
+        passwd=params["passwd"],
+        host=params["host"],
+        database=params["database"],
+        pool_name="mypool",
+        pool_size=5,
+        pool_reset_session=False
+    )
     # return MySQLConnection(**params)
     # return MySQLConnection(user=params["user"], password=params["password"],
     #                        host=params["host"], database=params["database"])
