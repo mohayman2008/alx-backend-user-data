@@ -5,6 +5,7 @@ import re
 from typing import List
 import os
 
+import mysql.connector
 from mysql.connector.connection import MySQLConnection
 # import mysql.connector  # type: ignore
 
