@@ -33,7 +33,7 @@ def before_request() -> None:
     '''
     if auth is None:
         return
-    
+
     if not auth.require_auth(request.path, EXCLUDED):
         return
 
