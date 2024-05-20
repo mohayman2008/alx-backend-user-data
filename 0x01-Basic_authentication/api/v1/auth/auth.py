@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 '''Athentication Module'''
+from re import match
 from typing import List, TypeVar
 
 from flask import request
@@ -12,8 +13,10 @@ class Auth:
         '''Checks if a path requires authentication or not'''
         if None in (path, excluded_paths) or not len(excluded_paths):
             return True
+
         path += '/' if path[-1] != '/' else ''
-        if path in excluded_paths:
+        if any(map(lambda x: match(rf"^{x.replace('*', '.*?')}", path),
+                   excluded_paths)):
             return False
         return True
 
