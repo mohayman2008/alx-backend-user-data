@@ -52,7 +52,11 @@ class BasicAuth(Auth):
         email_pwd = [user_email, user_pwd]
         if None in email_pwd or any(map(lambda x: type(x) != str, email_pwd)):
             return None
-        user_search_results = User.search({"email": user_email})
+        try:
+            user_search_results = User.search({"email": user_email})
+        except KeyError:
+            return None
+
         if not len(user_search_results):
             return None
         user = user_search_results[0]
