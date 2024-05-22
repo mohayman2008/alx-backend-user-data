@@ -36,11 +36,24 @@ class SessionAuth(Auth):
         if user_id is None:
             return None
 
-        try:
-            user_search_results = User.search({"id": user_id})
-        except KeyError:
-            return None
+        user_search_results = User.search({"id": user_id})
 
         if not len(user_search_results):
             return None
         return user_search_results[0]
+
+    def destroy_session(self, request=None):
+        '''Deletes the user session'''
+        if request is None:
+            return False
+
+        session_id = self.session_cookie(request)
+        if session_id is None:
+            return False
+
+        user_id = self.user_id_for_session_id(session_id)
+        if user_id is None:
+            return False
+
+        del self.user_id_by_session_id[session_id]
+        return True
