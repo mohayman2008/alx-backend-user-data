@@ -1,0 +1,7 @@
+*.backup
+*.backup*
+__pycache__
+.mypy_cache
+.db_User.json
+credentials
+.DS_Store
