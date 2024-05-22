@@ -22,10 +22,9 @@ class SessionDBAuth (SessionExpAuth):
 
     def user_id_for_session_id(self, session_id: str = None) -> str:
         '''Returns a User ID based on a Session ID'''
-        if session_id is None:  # or type(session_id) != str:
+        if session_id is None or type(session_id) != str:
             return None
 
-        # session = UserSession.search({"session_id": session_id})
         try:
             session = UserSession.search({"session_id": session_id})
         except KeyError:
@@ -35,12 +34,12 @@ class SessionDBAuth (SessionExpAuth):
             return None
         session = session[0]
 
-        # if self.session_duration <= 0:
-        #     return session.user_id
+        if self.session_duration <= 0:
+            return session.user_id
 
         session_duration = timedelta(seconds=self.session_duration)
         if session.created_at + session_duration < datetime.now():
-            # session.remove()
+            session.remove()
             return None
         return session.user_id
 
@@ -53,7 +52,7 @@ class SessionDBAuth (SessionExpAuth):
         if session_id is None:
             return False
 
-        session = UserSession.search({"id": session_id})
+        session = UserSession.search({"session_id": session_id})
         if len(session) == 0:
             return None
         session[0].remove()
