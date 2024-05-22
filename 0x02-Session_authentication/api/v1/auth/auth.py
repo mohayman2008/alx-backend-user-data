@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 '''Athentication Module'''
+from os import getenv
 from re import match
 from typing import List, TypeVar
 
 from flask import request
+
+SESSION_NAME = getenv("SESSION_NAME", "_my_session_id")
 
 
 class Auth:
@@ -29,3 +32,9 @@ class Auth:
     def current_user(self, request=None) -> TypeVar('User'):
         '''Dummy DocString'''
         return None
+
+    def session_cookie(self, request=None):
+        '''Returns the Session ID cookie value from a request'''
+        if request is None:
+            return None
+        return request.cookies.get(SESSION_NAME)

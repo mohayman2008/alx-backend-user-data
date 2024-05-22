@@ -4,7 +4,7 @@ from typing import TypeVar
 from uuid import uuid4
 
 from api.v1.auth.auth import Auth
-# from models.user import User
+from models.user import User
 
 
 class SessionAuth(Auth):
@@ -20,3 +20,27 @@ class SessionAuth(Auth):
         self.user_id_by_session_id[session_id] = user_id
 
         return session_id
+
+    def user_id_for_session_id(self, session_id: str = None) -> str:
+        '''Returns a User ID based on a Session ID'''
+        if session_id is None or type(session_id) != str:
+            return None
+        return self.user_id_by_session_id.get(session_id)
+
+    def current_user(self, request=None):
+        '''Returns a <User> instance based on a cookie value'''
+        if request is None:
+            return None
+
+        user_id = self.user_id_for_session_id(self.session_cookie(request))
+        if user_id is None:
+            return None
+
+        try:
+            user_search_results = User.search({"id": user_id})
+        except KeyError:
+            return None
+
+        if not len(user_search_results):
+            return None
+        return user_search_results[0]
