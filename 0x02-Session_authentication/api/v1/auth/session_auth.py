@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 '''Session Athentication Module'''
-from typing import TypeVar
 from uuid import uuid4
 
 from api.v1.auth.auth import Auth

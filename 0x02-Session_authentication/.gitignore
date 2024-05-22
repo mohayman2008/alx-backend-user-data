@@ -2,6 +2,6 @@
 *.backup*
 __pycache__
 .mypy_cache
-.db_User.json
+.db_*.json
 credentials
 .DS_Store
