@@ -25,10 +25,11 @@ class SessionDBAuth (SessionExpAuth):
         if session_id is None:  # or type(session_id) != str:
             return None
 
-        try:
-            session = UserSession.search({"session_id": session_id})
-        except KeyError:
-            return None
+        session = UserSession.search({"session_id": session_id})
+        # try:
+        #     session = UserSession.search({"session_id": session_id})
+        # except KeyError:
+        #     return None
 
         if len(session) == 0:
             return None
