@@ -39,7 +39,7 @@ class SessionDBAuth (SessionExpAuth):
 
         session_duration = timedelta(seconds=self.session_duration)
         if session.created_at + session_duration < datetime.now():
-            session.remove()
+            # session.remove()
             return None
         return session.user_id
 
