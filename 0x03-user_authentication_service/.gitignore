@@ -1,0 +1,5 @@
+*.backup
+*.backup*
+__pycache__
+.mypy_cache
+a.db
