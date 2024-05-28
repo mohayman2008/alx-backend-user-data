@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 '''The module contains the definition of the "Auth" class'''
+from typing import Optional
 from uuid import uuid4
 
 import bcrypt
@@ -46,3 +47,32 @@ class Auth:
 
         except NoResultFound:
             return False
+
+    def create_session(self, email: str) -> str:
+        '''Creates a session for the "User" with email "email" and returns
+        the session ID'''
+        try:
+            user = self._db.find_user_by(email=email)
+        except NoResultFound:
+            return None
+
+        session_id = _generate_uuid()
+        self._db.update_user(user.id, session_id=session_id)
+        return session_id
+
+    def get_user_from_session_id(self, session_id: str) -> Optional[User]:
+        '''Return the corresponding "User" instance, to the session with
+        "session_id" if found or None elsewise'''
+        if session_id is None:
+            return None
+        try:
+            return self._db.find_user_by(session_id=session_id)
+        except NoResultFound:
+            return None
+
+    def destroy_session(self, user_id: str) -> None:
+        '''Destroy the session for the "User" instance with id = <user_id>"'''
+        if user_id is None:
+            return None
+
+        self._db.update_user(user_id, session_id=None)
