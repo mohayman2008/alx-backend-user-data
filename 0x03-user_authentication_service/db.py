@@ -45,6 +45,8 @@ class DB:
             raise ValueError
 
         for key, val in kwargs.items():
+            if not hasattr(user, key):
+                raise ValueError
             setattr(user, key, val)
 
         self._session.commit()
