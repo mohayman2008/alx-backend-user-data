@@ -14,8 +14,9 @@ class DB:
 
     def __init__(self) -> None:
         '''Initialize a new DB instance'''
-        self._engine = create_engine("sqlite:///a.db", echo=True)
-        self._engine.echo = False  # Temporary
+        self._engine = create_engine("sqlite:///a.db?check_same_thread=False",
+                                     echo=True)
+        # self._engine.echo = False
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
