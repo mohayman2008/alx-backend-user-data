@@ -14,7 +14,9 @@ class DB:
 
     def __init__(self) -> None:
         '''Initialize a new DB instance'''
-        self._engine = create_engine("sqlite:///a.db?check_same_thread=False",
+        connect_args = {"check_same_thread": False}
+        self._engine = create_engine("sqlite:///a.db",
+                                     connect_args=connect_args,
                                      echo=True)
         # self._engine.echo = False
         Base.metadata.drop_all(self._engine)
